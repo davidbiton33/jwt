@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+<script src="https://cdn.scaledrone.com/scaledrone.min.js"></script>
+</head>
+<body>
+ <!-- <%= CHANNEL_ID %> -->
+
+ <script>
+
+ function addText(str){
+    document.body.innerHTML += `${str} <br/> `  ;
+ }
+
+ var drone = new Scaledrone('<%= CHANNEL_ID %>');
+
+ drone.on('open', (err) => {
+     if(err){
+         console.log(err)
+     }
+     else{
+        addText('Connect....');
+        fetch('auth/'+ drone.clientId).
+        then(res =>{
+            res.text()})
+        .then(jwt => {
+            console.log(drone.authenticate(jwt));
+        drone.authenticate(jwt)
+        console.log(drone.authenticate(jwt));
+         })
+
+         drone.on('authenticate', (err) => {
+if(err){
+   console.log(err);
+}
+else{
+    addText('authenticate');
+}
+
+ })
+     }
+     
+ });
+
+
+
+ const room = drone.subscribe('myroom');
+ room.on('open', () => addText('connected to room'));
+ room.on('data', (data) => addText(data));
+
+
+
+
+ </script>
+
+</body>
+</html>
